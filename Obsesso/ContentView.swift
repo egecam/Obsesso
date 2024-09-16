@@ -64,7 +64,7 @@ struct ContentView: View {
                 Spacer()
                 
                 if !items.isEmpty {
-                    Text("You have double-checked your \(items.last!.type) \(calculateTimePhrase(lastTime: items.last!.timestamp)) ago.")
+                    Text("You have double-checked your \(items.last!.type) \(Text(calculateTimePhrase(lastTime: items.last!.timestamp)).bold()) ago.")
                         .font(.title2)
                         .padding()
                 }
@@ -76,7 +76,7 @@ struct ContentView: View {
                         NavigationLink {
                             Text("\(item.title)")
                         } label: {
-                            Text(item.title) + Text(", ") +
+                            Text(item.title).bold() + Text(", ") +
                             Text(item.timestamp, format: Date.FormatStyle(date: .abbreviated, time: .shortened, capitalizationContext: .beginningOfSentence))
                         }
                     }
@@ -91,15 +91,15 @@ struct ContentView: View {
             label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 18.0)
-                        .foregroundStyle(.yellow.secondary)
+                        .foregroundStyle(.yellow.opacity(0.3))
                         .roundedCornerWithBorder(lineWidth: 5, borderColor: .yellow.opacity(0.5), radius: 18.0, corners: .allCorners)
                     
                     Text("DOUBLE CHECK")
                         .font(.title3.bold())
                         .padding()
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.yellow)
                 }
-                .frame(width: 150, height: 100)
+                .frame(width: 200, height: 50)
                 
             }
             .padding()
@@ -145,11 +145,16 @@ struct ContentView: View {
                         Spacer()
                     }
                     
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Prove it.")
-                                .font(.title.bold())
-                                .padding()
+                        VStack {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("Prove it.")
+                                        .font(.title.bold())
+                                        .padding()
+                                }
+                                
+                                Spacer()
+                            }
                             
                             ZStack {
                                 CameraPreview(camera: camera)
@@ -170,9 +175,14 @@ struct ContentView: View {
                                 }
                                 
                                 if let url = camera.videoURL {
-                                    Text("Video recorded: \(url.lastPathComponent)")
-                                        .font(.caption)
-                                        .padding()
+                                    ZStack {
+                                        Color.gray.opacity(0.5)
+                                            .clipShape(RoundedRectangle(cornerRadius: 12.0))
+                                        
+                                        Text("Video recorded: \(url.lastPathComponent)")
+                                            .font(.caption)
+                                            .padding()
+                                    }
                                 }
                                 
                                 if let errorMessage = camera.errorMessage {
@@ -184,9 +194,6 @@ struct ContentView: View {
                             
                         }
                         .padding()
-                        
-                        Spacer()
-                    }
                 }
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
                 .tabViewStyle(.page(indexDisplayMode: .always))
