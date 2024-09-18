@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D49FF07E2C9A3A69007A7529 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49FF07D2C9A3A69007A7529 /* OnboardingView.swift */; };
 		D4DB5A822C987655003FB528 /* ObsessoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DB5A812C987655003FB528 /* ObsessoApp.swift */; };
 		D4DB5A862C987655003FB528 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DB5A852C987655003FB528 /* Item.swift */; };
 		D4DB5A882C987656003FB528 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4DB5A872C987656003FB528 /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D49FF07D2C9A3A69007A7529 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		D4DB5A7E2C987655003FB528 /* Obsesso.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Obsesso.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4DB5A812C987655003FB528 /* ObsessoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObsessoApp.swift; sourceTree = "<group>"; };
 		D4DB5A852C987655003FB528 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			children = (
 				D4DB5A812C987655003FB528 /* ObsessoApp.swift */,
 				D4DB5A922C9876CF003FB528 /* ContentView.swift */,
+				D49FF07D2C9A3A69007A7529 /* OnboardingView.swift */,
 				D4DB5A852C987655003FB528 /* Item.swift */,
 				D4DB5A972C987923003FB528 /* Camera */,
 				D4DB5A872C987656003FB528 /* Assets.xcassets */,
@@ -157,6 +160,7 @@
 				D4DB5A942C9876CF003FB528 /* CameraPreview.swift in Sources */,
 				D4DB5A862C987655003FB528 /* Item.swift in Sources */,
 				D4DB5A962C9876CF003FB528 /* CameraModel.swift in Sources */,
+				D49FF07E2C9A3A69007A7529 /* OnboardingView.swift in Sources */,
 				D4DB5A952C9876CF003FB528 /* ContentView.swift in Sources */,
 				D4DB5A822C987655003FB528 /* ObsessoApp.swift in Sources */,
 			);

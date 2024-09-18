@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct ObsessoApp: App {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -25,7 +27,13 @@ struct ObsessoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if hasCompletedOnboarding {
+                ContentView()
+            } else {
+                OnboardingView(onComplete: {
+                    hasCompletedOnboarding = true
+                })
+            }
         }
         .modelContainer(sharedModelContainer)
     }

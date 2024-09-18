@@ -18,8 +18,14 @@ struct ContentView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var camera = CameraModel()
     @State private var showAlert = false
+    @State private var trigger = false
+    
+    var sortedItems: [Item] {
+        return items.sorted { $0.timestamp > $1.timestamp}
+    }
     
     func addItemAction() {
+        trigger = false
         if type.isEmpty || title.isEmpty || camera.videoURL == nil {
             return
         } else {
@@ -53,7 +59,7 @@ struct ContentView: View {
         NavigationSplitView {
             VStack {
                 HStack {
-                    Text("Compulse")
+                    Text("Obsesso")
                         .font(.largeTitle.bold())
                         .padding()
                         .padding(.top, 30)
@@ -64,15 +70,17 @@ struct ContentView: View {
                 Spacer()
                 
                 if !items.isEmpty {
-                    Text("You have double-checked your \(items.last!.type) \(Text(calculateTimePhrase(lastTime: items.last!.timestamp)).bold()) ago.")
+                    Text("You have double-checked your \(Text(sortedItems.first!.type).foregroundStyle(.indigo)) \(Text(calculateTimePhrase(lastTime: sortedItems.first!.timestamp)).bold()) ago.")
                         .font(.title2)
                         .padding()
+                } else {
+                    
                 }
                 
                 Spacer()
                 
                 List {
-                    ForEach(items.reversed()) { item in
+                    ForEach(sortedItems) { item in
                         NavigationLink {
                             Text("\(item.title)")
                         } label: {
@@ -86,23 +94,22 @@ struct ContentView: View {
                 
                 
                 Button  {
+                    trigger.toggle()
                     presentSheet = true
                 }
             label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 18.0)
-                        .foregroundStyle(.yellow.opacity(0.3))
-                        .roundedCornerWithBorder(lineWidth: 5, borderColor: .yellow.opacity(0.5), radius: 18.0, corners: .allCorners)
-                    
                     Text("DOUBLE CHECK")
-                        .font(.title3.bold())
-                        .padding()
-                        .foregroundStyle(.yellow)
-                }
-                .frame(width: 200, height: 50)
-                
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(width: 200, height: 50)
+                        .background(Color.indigo)
+                        .cornerRadius(10)
             }
             .padding()
+            .sensoryFeedback(
+                .impact(weight: .medium, intensity: 0.9),
+                trigger: trigger
+            )
                 
             }
         } detail: {
@@ -134,7 +141,7 @@ struct ContentView: View {
                                 Text("Type it.")
                                     .font(.title.bold())
                                 
-                                TextField("I have locked my car...", text: $title)
+                                TextField("I locked my car...", text: $title)
                                     .font(.title2)
                             }
                             .padding()
@@ -166,29 +173,51 @@ struct ContentView: View {
                                     Button(action: {
                                         camera.captureVideo()
                                     }) {
-                                        Image(systemName: camera.isRecording ? "record.circle.fill" : "record.circle")
-                                            .font(.system(size: 60))
-                                            .foregroundColor(camera.isRecording ? .red : .black)
-                                            .padding(.bottom)
+                                        ZStack {
+                                            Color.gray
+                                                .opacity(0.2)
+                                                .background(.ultraThinMaterial)
+                                                .frame(width: 70, height: 70)
+
+                                            
+                                            Image(systemName: camera.isRecording ? "record.circle.fill" : "record.circle")
+                                                .font(.system(size: 60))
+                                                .foregroundColor(camera.isRecording ? .red : .black)
+                                                
+                                        }
+                                        .roundedCornerWithBorder(lineWidth: 0, borderColor: .gray.opacity(0.2), radius: 50.0, corners: .allCorners)
+                                        .padding(.bottom)
                                     }
                                     .padding(.bottom)
                                 }
                                 
                                 if let url = camera.videoURL {
                                     ZStack {
-                                        Color.gray.opacity(0.5)
+                                        Color.clear
+                                            .background(.ultraThinMaterial)
                                             .clipShape(RoundedRectangle(cornerRadius: 12.0))
+                                            .frame(width: 250, height: 30)
                                         
                                         Text("Video recorded: \(url.lastPathComponent)")
                                             .font(.caption)
+                                            .foregroundColor(.red)
+                                            .background(.ultraThinMaterial)
                                             .padding()
                                     }
                                 }
                                 
                                 if let errorMessage = camera.errorMessage {
-                                    Text(errorMessage)
-                                        .foregroundColor(.red)
-                                        .padding()
+                                    ZStack {
+                                        Color.clear
+                                            .background(.ultraThinMaterial)
+                                            .clipShape(RoundedRectangle(cornerRadius: 12.0))
+                                            .frame(width: 250, height: 30)
+                                        
+                                        Text(errorMessage)
+                                            .foregroundColor(.red)
+                                            .background(.ultraThinMaterial)
+                                            .padding()
+                                    }
                                 }
                             }
                             
@@ -205,20 +234,20 @@ struct ContentView: View {
                         presentSheet = false
                     }
                 } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 18.0)
-                            .foregroundStyle(.green.secondary)
-                            .roundedCornerWithBorder(lineWidth: 5, borderColor: .green.opacity(0.5), radius: 18.0, corners: .allCorners)
-                        
                         Text("Confirm")
-                            .font(.title3.bold())
-                            .padding()
-                            .foregroundStyle(.black)
-                    }
-                    .frame(width: 225, height: 50)
-                    .opacity(title.isEmpty || type.isEmpty || camera.videoURL == nil ? 0.5 : 1.0)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(width: 200, height: 50)
+                            .background(Color.green)
+                            .cornerRadius(10)
+                            .overlay {
+                                title.isEmpty || type.isEmpty || camera.videoURL == nil ? Color.white.opacity(0.4) : nil
+                            }
                 }
-
+                .sensoryFeedback(
+                    .impact(weight: .medium, intensity: 0.9),
+                    trigger: trigger
+                )
             }
         })
         .alert(isPresented: $showAlert) {
